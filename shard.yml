@@ -1,0 +1,19 @@
+name: stream_remote_process_logs
+version: 0.1.0
+
+authors:
+  - Walter Kaunda <walterkaunda@gmail.com>
+
+targets:
+  stream_remote_process_logs:
+    main: src/stream_remote_process_logs.cr
+
+crystal: '>= 1.11.2'
+
+license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  redis:
+    github: stefanwille/crystal-redis

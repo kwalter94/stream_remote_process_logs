@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Log Streamer</title>
+    <style>
+      #logs-view {
+        min-height: 600px;
+        min-width: 800px;
+        background-color: black;
+        color: white;
+      }
+    </style>
+    <script>
+      onload = () => {
+        const form = document.querySelector("#command-input-form");
+        let socket = null;
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const id_input = document.querySelector("#command-id-input");
+          console.log(id_input);
+
+          const id = id_input.value;
+          if (id == "" || id == null) {
+            console.error("No command-id specified");
+            return;
+          }
+
+          const logs_view = document.querySelector("#logs-view");
+          console.log(logs_view);
+          logs_view.innerHTML = "";
+
+          if (socket !== null) {
+            socket.close();
+          }
+
+          socket = new WebSocket(`ws://localhost:8000/command/${id}`);
+          socket.addEventListener("message", event => {
+            const message = JSON.parse(event.data);
+            const p = document.createElement("p");
+            p.innerText = message["message"];
+            logs_view.append(p);
+          });
+        });
+      };
+
+    </script>
+  </head>
+
+  <body>
+    <div>
+      <form id="command-input-form">
+        <label for="command-input">Command</label>
+        <input id="command-input" name="command-input" type="text" placeholder="Command" value="dmesg -w" />
+      </form>
+    </div>
+
+    <div id="logs-view">
+    </div>
+  </body>
+</html>
