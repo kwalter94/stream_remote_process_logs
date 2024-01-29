@@ -5,7 +5,7 @@ streamed through a websocket.
 
 ## Installation
 
-1. Build this piece shyte
+1. Build this piece of shyte
 
 ```sh
 $ git clone https://github.com/kwalter94/stream_remote_process_logs.git
