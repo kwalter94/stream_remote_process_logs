@@ -1,4 +1,5 @@
 require "option_parser"
+require "redis"
 require "uuid"
 
 require "./stream_remote_process_logs/processes"
@@ -7,7 +8,7 @@ require "./stream_remote_process_logs/web"
 module StreamRemoteProcessLogs
   VERSION = "0.1.0"
 
-  command : Symbol | Nil = nil
+  command : Symbol? = nil
   options = {} of Symbol => String | Array(String)
 
   parser = OptionParser.parse do |parser|
@@ -40,7 +41,7 @@ module StreamRemoteProcessLogs
       exit 1
     end
 
-    process_id = Processes.run_process(exec_args[0], exec_args[1..])
+    process_id = Processes.run_process(Redis::Client.new, exec_args[0], exec_args[1..])
     puts "Started process #{process_id}"
     Fiber.yield
   when :serve
@@ -50,6 +51,8 @@ module StreamRemoteProcessLogs
       exit 1
     end
 
+
+    Web.init(Redis::Client.new)
     Web.serve(port: port.to_i)
   else
     puts "ERROR: No command specified"

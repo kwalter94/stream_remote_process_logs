@@ -16,4 +16,5 @@ dependencies:
   kemal:
     github: kemalcr/kemal
   redis:
-    github: stefanwille/crystal-redis
+    github: kwalter94/redis
+    branch: fix/streams
